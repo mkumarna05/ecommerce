@@ -1,0 +1,8 @@
+com\ecommerce\strategy\DiscountCalculatorTest.class
+com\ecommerce\controller\OrderControllerUnitTest.class
+com\ecommerce\service\OrderServiceTest.class
+com\ecommerce\controller\ProductControllerUnitTest.class
+com\ecommerce\service\AuthServiceTest.class
+com\ecommerce\controller\TestSecurityConfig.class
+com\ecommerce\controller\AuthControllerTest.class
+com\ecommerce\service\ProductServiceTest.class
