@@ -10,7 +10,9 @@ com\ecommerce\dto\OrderRequest.class
 com\ecommerce\controller\AuthController.class
 com\ecommerce\EcommerceApplication.class
 com\ecommerce\config\SecurityConfig.class
+com\ecommerce\filter\JwtAuthenticationFilter.class
 com\ecommerce\dto\DiscountRequest.class
+com\ecommerce\util\JwtUtil.class
 com\ecommerce\dto\LoginRequest.class
 com\ecommerce\dto\ProductDTO.class
 com\ecommerce\strategy\AmountThresholdDiscount.class
@@ -25,7 +27,6 @@ com\ecommerce\exception\ErrorResponse.class
 com\ecommerce\entity\Product.class
 com\ecommerce\dto\OrderItemRequest.class
 com\ecommerce\dto\SignupRequest.class
-com\ecommerce\config\JwtAuthenticationFilter.class
 com\ecommerce\service\ProductService.class
 com\ecommerce\strategy\UserDiscount.class
 com\ecommerce\entity\OrderItem$OrderItemBuilder.class
@@ -41,7 +42,6 @@ com\ecommerce\config\OpenApiConfig.class
 com\ecommerce\repository\UserRepository.class
 com\ecommerce\entity\Product$ProductBuilder.class
 com\ecommerce\controller\OrderController.class
-com\ecommerce\config\JwtUtil.class
 com\ecommerce\entity\Order$OrderBuilder.class
 com\ecommerce\entity\OrderStatus.class
 com\ecommerce\entity\User.class

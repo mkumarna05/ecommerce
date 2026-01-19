@@ -158,10 +158,10 @@ public class OrderService {
 	private void validateStock(OrderRequest request) {
 		for (var itemRequest : request.items()) {
 			Product product = productRepository.findById(itemRequest.productId()).orElseThrow(
-					() -> new ResourceNotFoundException("Product not found with id: " + itemRequest.productId()));
+					() -> new InsufficientStockException("Product not found with id: " + itemRequest.productId()));
 
 			if (product.getDeleted()) {
-				throw new ResourceNotFoundException("Product not found with id: " + itemRequest.productId());
+				throw new InsufficientStockException("Product not found with id: " + itemRequest.productId());
 			}
 
 			if (product.getQuantity() < itemRequest.quantity()) {

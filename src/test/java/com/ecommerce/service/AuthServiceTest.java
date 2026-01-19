@@ -19,7 +19,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.ecommerce.config.JwtUtil;
 import com.ecommerce.dto.LoginRequest;
 import com.ecommerce.dto.LoginResponse;
 import com.ecommerce.dto.SignupRequest;
@@ -27,6 +26,7 @@ import com.ecommerce.dto.SignupResponse;
 import com.ecommerce.entity.Role;
 import com.ecommerce.entity.User;
 import com.ecommerce.repository.UserRepository;
+import com.ecommerce.util.JwtUtil;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
