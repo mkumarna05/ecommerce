@@ -22,7 +22,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -56,8 +55,6 @@ public class SecurityConfigTest {
 		ReflectionTestUtils.setField(securityConfig, "secret", TEST_JWT_SECRET);
 	}
 
-	// ========== Bean Creation Tests ==========
-
 	@Test
 	@DisplayName("Should create PasswordEncoder bean")
 	void testPasswordEncoderBeanCreation() {
@@ -85,15 +82,6 @@ public class SecurityConfigTest {
 	}
 
 	@Test
-	@DisplayName("Should create JwtDecoder bean")
-	void testJwtDecoderBeanCreation() {
-		JwtDecoder jwtDecoder = securityConfig.jwtDecoder();
-
-		assertNotNull(jwtDecoder);
-		assertThat(jwtDecoder).isInstanceOf(JwtDecoder.class);
-	}
-
-	@Test
     @DisplayName("Should create AuthenticationManager bean")
     void testAuthenticationManagerBeanCreation() throws Exception {
         when(authConfig.getAuthenticationManager()).thenReturn(authManager);
@@ -112,8 +100,6 @@ public class SecurityConfigTest {
 		assertNotNull(corsSource);
 		assertThat(corsSource).isInstanceOf(CorsConfigurationSource.class);
 	}
-
-	// ========== PasswordEncoder Tests ==========
 
 	@Test
 	@DisplayName("PasswordEncoder should encode passwords correctly")
@@ -154,9 +140,8 @@ public class SecurityConfigTest {
 		assertTrue(encoder.matches(password, hash2));
 	}
 
-	// ========== CORS Configuration Tests ==========
-
 	@Test
+	@DisplayName("Test Cors Configuration")
 	void testCorsConfiguration() {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 
@@ -167,13 +152,10 @@ public class SecurityConfigTest {
 		assertThat(config.getAllowCredentials()).isFalse();
 	}
 
-	// ========== AuthenticationProvider Tests ==========
-
 	@Test
-	@DisplayName("AuthenticationProvider should be DaoAuthenticationProvider")
+	@DisplayName("Test AuthenticationProvider")
 	void testAuthenticationProviderType() {
 		AuthenticationProvider provider = securityConfig.authenticationProvider();
-
 		assertThat(provider).isInstanceOf(DaoAuthenticationProvider.class);
 	}
 
@@ -182,35 +164,8 @@ public class SecurityConfigTest {
 	void testAuthenticationProviderUsesCustomUserDetailsService() {
 		AuthenticationProvider provider = securityConfig.authenticationProvider();
 		DaoAuthenticationProvider daoProvider = (DaoAuthenticationProvider) provider;
-
-		// Verify it's configured (indirect test since getUserDetailsService is
-		// protected)
 		assertNotNull(daoProvider);
 	}
-
-	// ========== JwtDecoder Tests ==========
-
-	@Test
-	@DisplayName("JwtDecoder should be created with correct algorithm")
-	void testJwtDecoderAlgorithm() {
-		JwtDecoder decoder = securityConfig.jwtDecoder();
-
-		assertNotNull(decoder);
-		// Decoder should be NimbusJwtDecoder
-		assertThat(decoder.getClass().getSimpleName()).contains("NimbusJwtDecoder");
-	}
-
-	@Test
-	@DisplayName("JwtDecoder should use base64 decoded secret")
-	void testJwtDecoderUsesBase64Secret() {
-		// This test verifies the decoder is created without throwing exception
-		assertDoesNotThrow(() -> {
-			JwtDecoder decoder = securityConfig.jwtDecoder();
-			assertNotNull(decoder);
-		});
-	}
-
-	// ========== Constructor Tests ==========
 
 	@Test
 	@DisplayName("Constructor should initialize with required dependencies")
@@ -223,7 +178,6 @@ public class SecurityConfigTest {
 	@Test
 	@DisplayName("Constructor should accept null JwtAuthFilter (no validation)")
 	void testConstructorAcceptsNullJwtFilter() {
-		// Constructor doesn't validate, so it should not throw exception
 		assertDoesNotThrow(() -> {
 			SecurityConfig config = new SecurityConfig(null, userDetailsService);
 			assertNotNull(config);
@@ -233,27 +187,10 @@ public class SecurityConfigTest {
 	@Test
 	@DisplayName("Constructor should accept null UserDetailsService (no validation)")
 	void testConstructorAcceptsNullUserDetailsService() {
-		// Constructor doesn't validate, so it should not throw exception
 		assertDoesNotThrow(() -> {
 			SecurityConfig config = new SecurityConfig(jwtAuthFilter, null);
 			assertNotNull(config);
 		});
-	}
-
-	// ========== Integration Tests ==========
-
-	@Test
-	@DisplayName("All security beans should be compatible")
-	void testSecurityBeansCompatibility() {
-		PasswordEncoder encoder = securityConfig.passwordEncoder();
-		AuthenticationProvider provider = securityConfig.authenticationProvider();
-		JwtDecoder decoder = securityConfig.jwtDecoder();
-		CorsConfigurationSource corsSource = securityConfig.corsConfigurationSource();
-
-		assertNotNull(encoder);
-		assertNotNull(provider);
-		assertNotNull(decoder);
-		assertNotNull(corsSource);
 	}
 
 	@Test

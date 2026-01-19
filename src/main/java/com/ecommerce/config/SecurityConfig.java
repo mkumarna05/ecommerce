@@ -1,7 +1,5 @@
 package com.ecommerce.config;
 
-import javax.crypto.spec.SecretKeySpec;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +14,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -26,8 +22,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.ecommerce.filter.JwtAuthenticationFilter;
 import com.ecommerce.service.CustomUserDetailsService;
-
-import io.jsonwebtoken.io.Decoders;
 
 @Configuration
 @EnableWebSecurity
@@ -57,20 +51,11 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-				//.oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()));
 
 		// For H2 Console
 		http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
 		return http.build();
-	}
-
-	@Bean
-	public JwtDecoder jwtDecoder() {
-		// byte[] secretBytes = secret.getBytes(StandardCharsets.UTF_8);
-		byte[] secretBytes = Decoders.BASE64.decode(secret);
-		SecretKeySpec key = new SecretKeySpec(secretBytes, "HmacSHA256");
-		return NimbusJwtDecoder.withSecretKey(key).build();
 	}
 
 	@Bean
